@@ -1,0 +1,83 @@
+---
+title: "Prueba de Hipótesis"
+author: "Alexander Morales Panitz"
+date: "11/30/2021"
+output: html_document
+---
+```{r}
+library(readr)
+```
+
+```{r}
+R <- read.csv("Spotify Top 200 Global (2017-2021).csv")
+```
+
+## Pruebas de Hipótesis
+
+*Leer cantidad mínima de reproducciones para aparecer en el tren topic*
+
+Spotify considera que para que una canción apareza en el *trend topic* requiere una cantidad mayor a M millón de reproducciones. En base a esto, se utilizó los datos de la población, y la cantidad de reproducciones entre el año 2017 y 2021. Marcando M millón como la cantidad mínima de reproducciones, filtramos nuestro dataset y nos quedamos con un conjunto de canciones que pasaron la valla indicada. Siendo ésta, concluimos que la mayor cantidad de canciones aparecidas en el trend topic son del género *Pop*, la media de la duración del total de canciones de los trend topic son X minutos. Entonces...
+
+### Primera pruba de hipótesis
+
+**1. Hipótesis nula:**
+
+El promedio de la duración de las canciones con mayor cantidad de reproducciones tiene una media de X minutos. ¿Es cierto que las canciones de Pop, según se ha estudiado previamente que es el género más escuchado en este intervalo de año *es mayor a X minutos*? Considerando una muestra de N y una desviación estándar de S. Medir los parámetros del I.C y la precisión de la prubea de hipótesis.
+
+
+Media de las canciones más escuchadas : X
+Media de las canciones de Pop: y
+
+**2. Hipótesis alternativa:**
+
+La cantidad de minutos de pop es menor o diferente de X
+
+
+### Segunda prueba de hipótesis
+```
+##Prueba de Hipótesis
+
+Según páginas de google, las canciones en general tienen una media de 3.50 minutos de duración en un rango de 100 pistas. Para nuestra investigación, se desea saber si ello se cumple.
+
+H0 = La media de las canciones es u=3.83333
+H1 = La media de las canciones es menor a u=3.83333
+
+Para realizar la investigación, se establecerá como nivel de confianza 95%.
+{r}
+u<-3.83333
+muestra<-sample(R$Duration_Minutos,100)
+a<-mean(muestra)
+desv_s<-sd(muestra)
+zcrit<-qnorm(0.05)
+zcalc<-(a-u)/(desv_s/sqrt(100))
+zcrit
+zcalc
+if(zcrit>zcalc){
+  cat('Zona de rechazo')
+  
+}else{
+  cat('Zona de aceptación')
+}
+rango<-seq(-10,10,0.01)
+plot(rango,dnorm(rango))
+abline(v=zcrit,col='red')
+abline(v=zcalc,col='blue')
+legend("topright", 
+       legend = c ("Zcrítica","Zcalculada"), 
+       col = c ("red", "blue"), 
+       lty = c (1, 1), 
+       bty = "n"
+       )
+
+#Conclusión
+Por lo tanto, se rechaza que u=3.83333 y se acepta que u<3.833333. Con un nivel de confianza del 95% se rechaza la hipótesis nula y se acepta la hipótesis alternativa donde el promedio de canciones en la data de la investigación es menor a 3:50 min.
+```
+
+### Tercera prueba de hipótesis
+
+
+
+
+
+> En los últimos 5 años, el género con la mayor cantidad de reproducciones es el Pop. Entre el año 2017 al 2021 se tiene una media mayor a X. ¿Es cierto que la duración promedio de las canciones de Pop son menores a X minutos?
+> Se sabe que las canciones con mayor cantidad de reproducciones son aquellas que tienen una duración promedio de 3.5 minutos. ¿Cóm
