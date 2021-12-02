@@ -995,23 +995,59 @@ Para la segunda prueba de hipótesis planteamos los siguientes estadísticos:
 
 ### Tercera hipótesis
 
-Se sabe que la media de la duración de las canciones que tienen contenido *explicit* es M. Entonces, en base a esta premisa planteamos las siguientes hipótesis.
+Se sabe que la media de la duración de las canciones que tienen contenido *explicit* es 3.45. Entonces, en base a esta premisa planteamos la siguiente hipótesis.
 
 **1. Hipótesis nula:**
-
-La media de la duración de las canciones explicit es menor o igual que la media de las canciones con mayor cantidad de reproducciones.
+  
+  La media de la duración de las canciones explicit es menor o igual que la media del total de canciones del conjunto de datos.
 
 **2. Hipótesis alternativa:**
+  
+  La media de la duración de las canciones *explicit* es mayor que la media del total de canciones del conjunto de datos.
 
-La media de la duración de las canciones *explicit* es mayor que la media de las canciones con mayor cantidad de reproducciones.
-
-> Es fundamental recordar que la negación de una hipótesis no implica la acertación de la hipótesis alterna.
 
 Para la tercera prueba de hipótesis planteamos los siguientes estadísticos:
+  
+- La siginificancia de la prueba de hipótesis es 5%
+- El tamaño de la muestra es 100
+- La desviación estándar de la muestra es 0.81
+  
+#### Cálculo de la primera prueba de hipótesis
+```{r}
+alpha <- 0.05
+N_explicit_sample <- 100
+total_explicit <- R %>% select(Duration_Minutos, Streams) %>% filter(R$Explicit == "TRUE")
+explicit_sample <- sample(total_explicit$Duration_Minutos, N_explicit_sample)
+mean_explicit_sample <- mean(explicit_sample)
+sd_explicit_sample <- sd(explicit_sample)
+mean_total_dataset <- mean(R$Duration_Minutos)
+zobs <- (mean_total_dataset - mean_explicit_sample)/(sd_explicit_sample/sqrt(N_explicit_sample))
+zcrit<-qnorm(alpha,lower.tail=TRUE)
 
-- La siginificancia de la prueba de hipótesis es 4%
-- El tamaño de la muestra es n
-- La desviación estándar de la muestra es $\sigma$
+```
+```{r}
+interv<-seq(-3,3,by=0.1)
+plot(interv,dnorm(interv),type="l")
+abline(v=c(zcrit,zcalc),lty=c(1,2),col=c("blue","red"))
+abline(h=1,col="gray")
+legend("topleft",
+       legend = c ("Zcritico","Zcalculada"),
+       col = c ("blue", "red"),
+       lty = c (1, 2),
+       bty = "n"
+)
+```
+
+
+
+De la gráfica podemos ver que el zcalculado se encuentra fuera del zcrítico, por lo que no podemos descartar esta primera hipótesis.
+```{r}
+pnorm(zobs)
+```
+
+
+El valor de p es mayor que el nivel de significancia, por lo que no hay motivo para rechazar la hipótesis nula.
+
 
 #### Cálculo de la primera prueba de hipótesis
 
